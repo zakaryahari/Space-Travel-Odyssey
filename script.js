@@ -1,5 +1,7 @@
 // login js script part 
 
+const SESSION_KEY = 'login';
+const VALID_EMAIL = 'zakaryahari42@gmail.com';
 
 // User Story 1:
 
@@ -14,14 +16,14 @@ if (submit_login_btn) {
         const usersavedinfo = JSON.parse(userstring);
 
 
-        if (email === usersavedinfo.user) {
+        if (email === VALID_EMAIL) {
 
             const username = {
                 user: 'zakaryahari42@gmail.com',
                 islogin: true,
             };
 
-            localStorage.setItem('login', JSON.stringify(username));
+            localStorage.setItem(SESSION_KEY, JSON.stringify(username));
 
             console.log('valide');
             Login_info_valid();
@@ -56,6 +58,19 @@ document.addEventListener('DOMContentLoaded', function () {
         Login_href.textContent = 'logout';
     }
 });
+
+const Login_href = document.getElementById('Login_href_link_id');
+
+if (Login_href) {
+    Login_href.addEventListener('click', () => {
+        Login_href.textContent = 'login';
+        const userlogin_string = localStorage.getItem('login');
+        const user = JSON.parse(userlogin_string);
+        user.islogin = false;
+        localStorage.setItem('login', JSON.stringify(user));
+    });
+}
+
 
 // booking js part
 
