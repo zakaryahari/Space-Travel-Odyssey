@@ -31,7 +31,11 @@
         "Lunar base tour",
         "Spacewalk experience"
       ],
-      "accommodations": ["standard", "luxury", "zero-g"],
+      "accommodations": [
+        "standard",
+        "luxury",
+        "zero-g"
+      ],
       "popularity": 5,
       "safetyRating": 5,
       "bookingCode": "SV-MOON"
@@ -67,7 +71,11 @@
         "Dust storm observation",
         "Underground habitat experience"
       ],
-      "accommodations": ["standard", "luxury", "zero-g"],
+      "accommodations": [
+        "standard",
+        "luxury",
+        "zero-g"
+      ],
       "popularity": 4,
       "safetyRating": 4,
       "bookingCode": "SV-MARS"
@@ -103,7 +111,10 @@
         "Jupiter observation",
         "Radiation-shielded excursions"
       ],
-      "accommodations": ["standard", "luxury"],
+      "accommodations": [
+        "standard",
+        "luxury"
+      ],
       "popularity": 3,
       "safetyRating": 3,
       "bookingCode": "SV-EUROPA"
@@ -139,7 +150,10 @@
         "Organic chemistry studies",
         "Ring-system observation"
       ],
-      "accommodations": ["standard", "luxury"],
+      "accommodations": [
+        "standard",
+        "luxury"
+      ],
       "popularity": 2,
       "safetyRating": 3,
       "bookingCode": "SV-TITAN"
@@ -175,7 +189,11 @@
         "Earth observation",
         "Orbital photography"
       ],
-      "accommodations": ["standard", "luxury", "zero-g"],
+      "accommodations": [
+        "standard",
+        "luxury",
+        "zero-g"
+      ],
       "popularity": 4,
       "safetyRating": 5,
       "bookingCode": "SV-ORBITAL"
@@ -211,7 +229,10 @@
         "Solar observation",
         "Zero-gravity recreation"
       ],
-      "accommodations": ["luxury", "zero-g"],
+      "accommodations": [
+        "luxury",
+        "zero-g"
+      ],
       "popularity": 3,
       "safetyRating": 4,
       "bookingCode": "SV-VENUS"
