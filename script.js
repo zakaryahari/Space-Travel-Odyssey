@@ -53,8 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (user.islogin === true) {
         const Login_href = document.getElementById('Login_href_link_id');
-        Login_href.textContent = 'logout'
-        console.log(Login_href.textContent);
+        Login_href.textContent = 'logout';
     }
 });
 
