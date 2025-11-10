@@ -1,5 +1,10 @@
 // login js script part 
 
+let accommodation_data = [];
+let destinations_data = [];
+let spacecraft_data = [];
+let booking_option_data = [];
+
 const SESSION_KEY = 'login';
 const VALID_EMAIL = 'zakaryahari42@gmail.com';
 
@@ -48,6 +53,8 @@ function Login_info_valid() {
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    Load_Data();
+
     // User Story 2:
 
     const userlogin_string = localStorage.getItem('login');
@@ -71,6 +78,46 @@ if (Login_href) {
     });
 }
 
+// User Story 3:
+
+
+async function loadJsonData(filename) {
+    const response = await fetch(filename);
+    return await response.json();
+}
+
+
+async function Load_Data() {
+
+    const [accoms, dests, spacecraft, options] = await Promise.all([
+        loadJsonData('./Data/accommodations.json'),
+        loadJsonData('./Data/destinations.json'),
+        loadJsonData('./Data/spacecraft.json'),
+        loadJsonData('./Data/booking-options.json')
+    ]);
+
+
+    if (accoms && accoms.accommodations) {
+        accommodation_data = accoms.accommodations;
+        console.log(`Loaded ${accommodation_data.length} accommodations.`);
+    }
+
+    if (dests && dests.destinations) {
+        destinations_data = dests.destinations;
+        console.log(`Loaded ${destinations_data.length} destinations.`);
+    }
+
+    if (spacecraft && spacecraft.spacecraft) {
+        spacecraft_data = spacecraft.spacecraft;
+        console.log(`Loaded ${spacecraft_data.length} spacecraft.`);
+    }
+
+    if (options) {
+        booking_option_data = options;
+        console.log("Loaded booking options.");
+    }
+
+}
 
 // booking js part
 
