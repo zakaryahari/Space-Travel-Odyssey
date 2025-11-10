@@ -43,8 +43,8 @@ function Login_info_valid() {
 }
 
 
+
 document.addEventListener('DOMContentLoaded', function () {
-    // createStars();
 
     // User Story 2:
 
