@@ -33,6 +33,7 @@ if (submit_login_btn) {
             console.log('valide');
             Login_info_valid();
             window.location.href = 'index.html';
+            console.log('rihab');
         }
         else {
             alert('Invalide user info , Please Try Again with the corect info.');
@@ -54,16 +55,17 @@ function Login_info_valid() {
 document.addEventListener('DOMContentLoaded', function () {
 
     Load_Data();
-
+    Load_Destination_option();
     // User Story 2:
 
     const userlogin_string = localStorage.getItem('login');
     const user = JSON.parse(userlogin_string);
 
     if (user.islogin === true) {
-        const Login_href = document.getElementById('Login_href_link_id');
-        Login_href.textContent = 'logout';
+        Login_info_valid();
     }
+
+
 });
 
 const Login_href = document.getElementById('Login_href_link_id');
@@ -79,7 +81,6 @@ if (Login_href) {
 }
 
 // User Story 3:
-
 
 async function loadJsonData(filename) {
     const response = await fetch(filename);
@@ -117,6 +118,27 @@ async function Load_Data() {
         console.log("Loaded booking options.");
     }
 
+    Load_Destination_option();
+}
+
+function Load_Destination_option() {
+    const booking_form = document.getElementById('booking-form');
+
+    if (booking_form) {
+        const destination_select_input = document.getElementById('destination');
+        destination_select_input.innerHTML = '';
+
+        destinations_data.forEach(Destination_val => {
+            const child_option = document.createElement('option');
+            child_option.textContent = Destination_val.name;
+            console.log(Destination_val.name);
+
+            child_option.setAttribute('value', Destination_val.id);
+
+            destination_select_input.appendChild(child_option);
+        });
+
+    }
 }
 
 // booking js part
