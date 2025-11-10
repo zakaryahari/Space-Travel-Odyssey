@@ -55,7 +55,7 @@ function Login_info_valid() {
 document.addEventListener('DOMContentLoaded', function () {
 
     Load_Data();
-    Load_Destination_option();
+
     // User Story 2:
 
     const userlogin_string = localStorage.getItem('login');
