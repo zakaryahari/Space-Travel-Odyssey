@@ -189,5 +189,78 @@ if (destination) {
     });
 }
 
+function Passenger_inputset_load_inputs(val) {
+    for (let index = 0; index < val; index++) {
+                const inner_inputset = `
+                    <h3 class="font-orbitron text-2xl font-bold mb-4 mt-8 border-b border-neon-blue/20 pb-2">Personal
+                            Information (Passenger N°${index+1})</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="passenger-container">
+                            <div class="form-group">
+                                <label for="first-name-1" class="block mb-2 font-semibold text-gray-200">First Name</label>
+                                <input type="text" id="first-name-1" name="firstName[]" required
+                                    placeholder="Enter your first name"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name-1" class="block mb-2 font-semibold text-gray-200">Last Name</label>
+                                <input type="text" id="last-name-1" name="lastName[]" required
+                                    placeholder="Enter your last name"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email-1" class="block mb-2 font-semibold text-gray-200">Email Address</label>
+                                <input type="email" id="email-1" name="email[]" required placeholder="Enter your email"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone-1" class="block mb-2 font-semibold text-gray-200">Phone Number</label>
+                                <input type="tel" id="phone-1" name="phone[]" required placeholder="Enter your phone number"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
+
+                            <div class="col-span-2">
+                                <label for="requirements" class="block mb-2 font-semibold text-gray-200">Special
+                                    Requirements</label>
+                                <textarea id="requirements" name="requirements"
+                                    placeholder="Any special requirements or notes..."
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors min-h-[100px]"></textarea>
+                            </div>
+                        </div>
+                `;
+                Passenger_inputset_container.innerHTML += inner_inputset;
+            }
+}
+const Passenger_inputset_container = document.getElementById('Passenger_inputset_container');
+const add_passenger_btn = document.getElementById('add_passenger_btn');
+
+function Passenger_inputset(val) {
+    if (val == 1 || val == 2 || val == 3) {
+        if (Passenger_inputset_container) {
+            Passenger_inputset_container.innerHTML = '';
+            add_passenger_btn.classList.add('hidden');
+            if (val == 3) {
+                add_passenger_btn.classList.remove('hidden');
+                // Passenger_inputset_load_inputs(val);
+            }
+            Passenger_inputset_load_inputs(val);
+        }
+    }
+
+}
+
+const radio_container = document.getElementById('radio_container');
+
+if (radio_container) {
+    radio_container.addEventListener('click', (e)=>{
+        if (e.target.tagName === 'INPUT' && e.target.type === 'radio') {
+            // console.log('TEST');
+            const radio_selected = e.target.value;
+            // console.log(radio_selected);
+            Passenger_inputset(radio_selected);
+        }
+    });
+}
+
 // booking js part
 
