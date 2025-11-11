@@ -128,17 +128,65 @@ function Load_Destination_option() {
         const destination_select_input = document.getElementById('destination');
         destination_select_input.innerHTML = '';
 
+        const default_option = document.createElement('option');
+        default_option.textContent = 'Please select your destination...';
+        default_option.selected = true ;
+        default_option.setAttribute('value','default_option');
+
+        destination_select_input.appendChild(default_option);
+
         destinations_data.forEach(Destination_val => {
             const child_option = document.createElement('option');
             child_option.textContent = Destination_val.name;
-            console.log(Destination_val.name);
-
+            // console.log(Destination_val.name);
+            // if (Destination_val.id === "moon") {
+            //     child_option.selected = true;
+            // }
             child_option.setAttribute('value', Destination_val.id);
 
             destination_select_input.appendChild(child_option);
         });
-
     }
+}
+
+function Afficher_Accommodation(List) {
+    const Accommodation_container_id = document.getElementById('Accommodation_container_id');
+
+    if (Accommodation_container_id) {
+        Accommodation_container_id.innerHTML= '';
+
+        
+        List.forEach(des => {
+            accommodation_data.forEach(acc => {
+                if (des === acc.id) {
+                    const accomodation_card = `
+                            <label
+                                class="flex flex-col p-4 border border-neon-blue/30 rounded-lg cursor-pointer transition-all hover:bg-space-blue/70 has-checked:border-neon-blue">
+                                <input type="radio" name="accommodation" value="${acc.id}" class="radio_btn hidden peer">
+                                <span class="font-orbitron text-lg text-neon-blue peer-checked:text-neon-cyan">${acc.name}</span>
+                                <p class="text-gray-400 text-sm">${acc.shortDescription}</p>
+                            </label>
+                    `;
+                    Accommodation_container_id.innerHTML +=accomodation_card;
+                }
+            });
+        });
+    }
+}
+
+const destination = document.getElementById('destination');
+
+if (destination) {
+    destination.addEventListener('change', (e) => {
+        console.log(e.target.value);
+        let selected_destinations = [];
+        destinations_data.forEach(destinations_val => {
+            if (e.target.value === destinations_val.id) {
+                selected_destination = destinations_val;
+                Afficher_Accommodation(selected_destination.accommodations);
+            }
+        })
+    });
 }
 
 // booking js part
