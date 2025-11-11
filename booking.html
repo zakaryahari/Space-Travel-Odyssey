@@ -257,7 +257,7 @@
 
                     <div class="col-span-1 mt-4">
                         <label class="block mb-3 font-semibold text-gray-200">Number of Passengers</label>
-                        <div class="flex space-x-6">
+                        <div class="flex space-x-6" id="radio_container">
                             <div class="flex items-center">
                                 <input type="radio" id="solo" name="passengers" value="1"
                                     class="text-neon-blue focus:ring-neon-blue" checked>
@@ -310,47 +310,53 @@
 
                 </div>
 
-                <h3 class="font-orbitron text-2xl font-bold mb-4 mt-8 border-b border-neon-blue/20 pb-2">Personal
-                    Information (Lead Passenger)</h3>
+                <div id="Passenger_inputset">
+                    <div id="Passenger_inputset_container">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="passenger-container">
-                    <div class="form-group">
-                        <label for="first-name-1" class="block mb-2 font-semibold text-gray-200">First Name</label>
-                        <input type="text" id="first-name-1" name="firstName[]" required
-                            placeholder="Enter your first name"
-                            class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
-                    </div>
-                    <div class="form-group">
-                        <label for="last-name-1" class="block mb-2 font-semibold text-gray-200">Last Name</label>
-                        <input type="text" id="last-name-1" name="lastName[]" required
-                            placeholder="Enter your last name"
-                            class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
-                    </div>
+                        <h3 class="font-orbitron text-2xl font-bold mb-4 mt-8 border-b border-neon-blue/20 pb-2">Personal
+                            Information (Lead Passenger)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="passenger-container">
+                            <div class="form-group">
+                                <label for="first-name-1" class="block mb-2 font-semibold text-gray-200">First Name</label>
+                                <input type="text" id="first-name-1" name="firstName[]" required
+                                    placeholder="Enter your first name"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name-1" class="block mb-2 font-semibold text-gray-200">Last Name</label>
+                                <input type="text" id="last-name-1" name="lastName[]" required
+                                    placeholder="Enter your last name"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
 
-                    <div class="form-group">
-                        <label for="email-1" class="block mb-2 font-semibold text-gray-200">Email Address</label>
-                        <input type="email" id="email-1" name="email[]" required placeholder="Enter your email"
-                            class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone-1" class="block mb-2 font-semibold text-gray-200">Phone Number</label>
-                        <input type="tel" id="phone-1" name="phone[]" required placeholder="Enter your phone number"
-                            class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
-                    </div>
+                            <div class="form-group">
+                                <label for="email-1" class="block mb-2 font-semibold text-gray-200">Email Address</label>
+                                <input type="email" id="email-1" name="email[]" required placeholder="Enter your email"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone-1" class="block mb-2 font-semibold text-gray-200">Phone Number</label>
+                                <input type="tel" id="phone-1" name="phone[]" required placeholder="Enter your phone number"
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors">
+                            </div>
 
-                    <div class="col-span-2">
-                        <label for="requirements" class="block mb-2 font-semibold text-gray-200">Special
-                            Requirements</label>
-                        <textarea id="requirements" name="requirements"
-                            placeholder="Any special requirements or notes..."
-                            class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors min-h-[100px]"></textarea>
+                            <div class="col-span-2">
+                                <label for="requirements" class="block mb-2 font-semibold text-gray-200">Special
+                                    Requirements</label>
+                                <textarea id="requirements" name="requirements"
+                                    placeholder="Any special requirements or notes..."
+                                    class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors min-h-[100px]"></textarea>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
+
 
                 <div id="additional-passengers">
                 </div>
 
-                <div class="mt-6 text-center">
+                <div class="mt-6 text-center hidden" id="add_passenger_btn">
                     <button type="button" id="add-passenger-btn"
                         class="w-full btn-primary px-6 py-4 rounded-lg font-bold text-white w-full text-xl shadow-2xl shadow-neon-blue/30">
                         <i class="fas fa-user-plus mr-2"></i> Add Passenger
@@ -358,7 +364,7 @@
                 </div>
 
 
-                <!-- <h3
+                <h3
                     class="font-orbitron text-2xl font-bold mb-4 mt-12 border-b border-neon-blue/20 pb-2 text-neon-cyan">
                     Price Summary</h3>
 
@@ -366,7 +372,7 @@
                     class="bg-space-dark/70 p-4 rounded-lg border border-neon-cyan/30 flex justify-between items-center mb-6">
                     <p class="font-semibold text-xl">Total Trip Price:</p>
                     <p id="total-price" class="font-orbitron text-3xl text-neon-cyan text-glow">$0.00</p>
-                </div> -->
+                </div>
 
                 <div class="mt-6">
                     <button type="submit" id="confirm-booking-btn"
