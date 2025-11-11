@@ -278,11 +278,11 @@
 
                     <div class="col-span-1 mt-4">
                         <label class="block mb-3 font-semibold text-gray-200">Accommodation Type</label>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="Accommodation_container_id">
 
                             <label
                                 class="flex flex-col p-4 border border-neon-blue/30 rounded-lg cursor-pointer transition-all hover:bg-space-blue/70 has-checked:border-neon-blue">
-                                <input type="radio" name="accommodation" value="standard" class="hidden peer" checked>
+                                <input type="radio" name="accommodation" value="standard" class="radio_btn hidden peer" checked>
                                 <span class="font-orbitron text-lg text-neon-blue peer-checked:text-neon-cyan">Standard
                                     Cabin</span>
                                 <p class="text-gray-400 text-sm">Comfortable private quarters with basic amenities</p>
@@ -290,7 +290,7 @@
 
                             <label
                                 class="flex flex-col p-4 border border-neon-blue/30 rounded-lg cursor-pointer transition-all hover:bg-space-blue/70 has-checked:border-neon-blue">
-                                <input type="radio" name="accommodation" value="luxury" class="hidden peer">
+                                <input type="radio" name="accommodation" value="luxury" class="radio_btn hidden peer">
                                 <span class="font-orbitron text-lg text-neon-blue peer-checked:text-neon-cyan">Luxury
                                     Suite</span>
                                 <p class="text-gray-400 text-sm">Spacious suite with premium amenities and viewpoints
@@ -299,7 +299,7 @@
 
                             <label
                                 class="flex flex-col p-4 border border-neon-blue/30 rounded-lg cursor-pointer transition-all hover:bg-space-blue/70 focus:border-neon-blue focus:outline-none transition-colors">
-                                <input type="radio" name="accommodation" value="zero-g" class="hidden peer">
+                                <input type="radio" name="accommodation" value="zero-g" class="radio_btn hidden peer">
                                 <span class="font-orbitron text-lg text-neon-blue peer-checked:text-neon-cyan">Zero-G
                                     Pod</span>
                                 <p class="text-gray-400 text-sm">Advanced accommodation with zero-gravity experience</p>
