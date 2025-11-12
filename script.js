@@ -393,5 +393,4 @@ function Calculat_price() {
 }
 
 
-// booking js part
 
