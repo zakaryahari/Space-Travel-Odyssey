@@ -66,6 +66,13 @@ document.addEventListener('DOMContentLoaded', function () {
         Login_info_valid();
     }
 
+    const destination_select_input = document.getElementById('destination');
+    const selectedDestId = destination_select_input.value;
+    console.log(selectedDestId);
+
+    if (selectedDestId === 'default_option') {
+        Afficher_Accommodation(null);
+    }
 
 });
 
@@ -131,48 +138,56 @@ function Load_Destination_option() {
 
         const default_option = document.createElement('option');
         default_option.textContent = 'Please select your destination...';
-        default_option.selected = true ;
-        default_option.setAttribute('value','default_option');
-        
+        default_option.selected = true;
+        default_option.setAttribute('value', 'default_option');
+
         destination_select_input.appendChild(default_option);
-        
+
         destinations_data.forEach(Destination_val => {
             const child_option = document.createElement('option');
             child_option.textContent = Destination_val.name;
             // console.log(Destination_val.name);
             // if (Destination_val.id === "moon") {
-                //     child_option.selected = true;
-                // }
-                child_option.setAttribute('value', Destination_val.id);
-                child_option.setAttribute('price_val',Destination_val.price);
-                
-                destination_select_input.appendChild(child_option);
+            //     child_option.selected = true;
+            // }
+            child_option.setAttribute('value', Destination_val.id);
+            child_option.setAttribute('price_val', Destination_val.price);
+
+            destination_select_input.appendChild(child_option);
         });
     }
 }
 
-function Afficher_Accommodation(List) {
+function Afficher_Accommodation(ID) {
     const Accommodation_container_id = document.getElementById('Accommodation_container_id');
-
-    if (Accommodation_container_id) {
-        Accommodation_container_id.innerHTML= '';
-
+    if (ID !== null) {
         
-        List.forEach(des => {
+        
+        if (Accommodation_container_id) {
+            Accommodation_container_id.innerHTML = '';
+            
+            
             accommodation_data.forEach(acc => {
-                if (des === acc.id) {
-                    const accomodation_card = `
+                acc.availableOn.forEach(available =>{
+                    if (available === ID) {
+                        console.log('true');
+                        // console.log(acc.id);
+                        const accomodation_card = `
                             <label
-                                class="flex flex-col p-4 border border-neon-blue/30 rounded-lg cursor-pointer transition-all hover:bg-space-blue/70 has-checked:border-neon-blue">
+                                class="Accommodation_card_iteam flex flex-col p-4 border border-neon-blue/30 rounded-lg cursor-pointer transition-all hover:bg-space-blue/70 has-checked:border-neon-blue" id="" >
                                 <input type="radio" name="accommodation" value="${acc.id}" class="radio_btn hidden peer" price_val="${acc.pricePerDay}">
                                 <span class="font-orbitron text-lg text-neon-blue peer-checked:text-neon-cyan">${acc.name}</span>
                                 <p class="text-gray-400 text-sm">${acc.shortDescription}</p>
                             </label>
-                    `;
-                    Accommodation_container_id.innerHTML +=accomodation_card;
-                }
+                            `;
+                        Accommodation_container_id.innerHTML += accomodation_card;
+                    }
+                });
             });
-        });
+        }
+    }
+    else{
+        Accommodation_container_id.innerHTML = '';
     }
 }
 
@@ -180,25 +195,31 @@ const destination = document.getElementById('destination');
 const totalprice_input = document.getElementById('total-price');
 
 if (destination) {
-    
+
     destination.addEventListener('change', (e) => {
         // console.log(e.target.value);
-        let selected_destinations = [];
+        let selected_destination = [];
         destinations_data.forEach(destinations_val => {
             if (e.target.value === destinations_val.id) {
                 selected_destination = destinations_val;
-                Afficher_Accommodation(selected_destination.accommodations);
+                Afficher_Accommodation(selected_destination.id);
+                console.log(selected_destination.id);
             }
+
+            // console.log(e.target.value);
         });
+        if (e.target.value === 'default_option') {
+            Afficher_Accommodation(null);
+        }
     });
     Calculat_price();
 }
 
 function Passenger_inputset_load_inputs(val) {
     for (let index = 0; index < val; index++) {
-                const inner_inputset = `
+        const inner_inputset = `
                     <h3 class="font-orbitron text-2xl font-bold mb-4 mt-8 border-b border-neon-blue/20 pb-2">Personal
-                            Information (Passenger N°${index+1})</h3>
+                            Information (Passenger N°${index + 1})</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="passenger-container">
                             <div class="form-group">
                                 <label for="first-name-1" class="block mb-2 font-semibold text-gray-200">First Name</label>
@@ -233,16 +254,16 @@ function Passenger_inputset_load_inputs(val) {
                             </div>
                         </div>
                 `;
-                Passenger_inputset_container.innerHTML += inner_inputset;
-            }
+        Passenger_inputset_container.innerHTML += inner_inputset;
+    }
 }
 
 
 function Passenger_inputset_load_inputs_single(val) {
 
-                const inner_inputset = `
+    const inner_inputset = `
                     <h3 class="font-orbitron text-2xl font-bold mb-4 mt-8 border-b border-neon-blue/20 pb-2">Personal
-                            Information (Passenger N°${val+1})</h3>
+                            Information (Passenger N°${val + 1})</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="passenger-container">
                             <div class="form-group">
                                 <label for="first-name-1" class="block mb-2 font-semibold text-gray-200">First Name</label>
@@ -277,7 +298,7 @@ function Passenger_inputset_load_inputs_single(val) {
                             </div>
                         </div>
                 `;
-                Passenger_inputset_container.innerHTML += inner_inputset;
+    Passenger_inputset_container.innerHTML += inner_inputset;
 }
 
 const Passenger_inputset_container = document.getElementById('Passenger_inputset_container');
@@ -285,7 +306,7 @@ const add_passenger_btn = document.getElementById('add_passenger_btn');
 // const add_passenger_btn = document.getElementById('add_passenger_btn');
 
 function Passenger_inputset(val) {
- 
+
     if (val == 1 || val == 2 || val == 3) {
         if (Passenger_inputset_container) {
 
@@ -299,25 +320,25 @@ function Passenger_inputset(val) {
             }
             Passenger_inputset_load_inputs(val);
         }
-    let add_passenger_counter = 0;
+        let add_passenger_counter = 0;
 
     }
 }
 
 // function Add_multi_passenger() {
-    
+
 // }
-let radio_option ;
+let radio_option;
 
 if (add_passenger_btn) {
 
-    
-    add_passenger_btn.addEventListener('click' , ()=>{
+
+    add_passenger_btn.addEventListener('click', () => {
         const allFirstNameInputs = document.querySelectorAll('input[name="firstName[]"]');
         // console.log(allFirstNameInputs.length);
         let add_passenger_counter = allFirstNameInputs.length;
 
-        Passenger_inputset_load_inputs_single(add_passenger_counter);      
+        Passenger_inputset_load_inputs_single(add_passenger_counter);
         Calculat_price();
     });
 
@@ -326,7 +347,7 @@ if (add_passenger_btn) {
 const radio_container = document.getElementById('radio_container');
 
 if (radio_container) {
-    radio_container.addEventListener('click', (e)=>{
+    radio_container.addEventListener('click', (e) => {
         if (e.target.tagName === 'INPUT' && e.target.type === 'radio') {
             // console.log('TEST');
             const radio_selected = e.target.value;
@@ -337,7 +358,7 @@ if (radio_container) {
         }
 
     });
-    
+
 }
 
 if (radio_container) {
@@ -347,12 +368,20 @@ if (radio_container) {
 const accommodationContainer = document.getElementById('Accommodation_container_id');
 
 if (accommodationContainer) {
-    accommodationContainer.addEventListener('change', () => { 
+    accommodationContainer.addEventListener('click', (e) => { 
+        if (e.target.name == 'accommodation' && e.target.type == 'radio') {
+            const arr_lables = document.querySelectorAll('.Accommodation_card_iteam');
+            arr_lables.forEach(lable => {
+                if (lable.classList.) {
+                    
+                }
+            });
+        }        
         Calculat_price();
     });
 }
 
-function findDataById(data_arr , selected_id) {
+function findDataById(data_arr, selected_id) {
     return data_arr.find(item => item.id === selected_id);
 }
 
@@ -385,7 +414,7 @@ function Calculat_price() {
     }
     Total_price += destObject.price;
 
-    Total_price += accommObject.pricePerDay ; 
+    Total_price += accommObject.pricePerDay;
 
     Total_price *= actualPassengerCount;
 
@@ -397,11 +426,11 @@ function Calculat_price() {
 const confirm_booking_btn = document.getElementById('confirm-booking-btn');
 
 if (confirm_booking_btn) {
-    confirm_booking_btn.addEventListener('click', ()=>{
+    confirm_booking_btn.addEventListener('click', () => {
 
         const userlogin_string = localStorage.getItem('login');
         const user = JSON.parse(userlogin_string);
-        
+
         if (user.islogin === false) {
             alert('Please login so you can book your destination.');
             window.location.href = "login.html";
