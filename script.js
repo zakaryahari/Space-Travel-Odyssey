@@ -394,3 +394,17 @@ function Calculat_price() {
 
 
 
+const confirm_booking_btn = document.getElementById('confirm-booking-btn');
+
+if (confirm_booking_btn) {
+    confirm_booking_btn.addEventListener('click', ()=>{
+
+        const userlogin_string = localStorage.getItem('login');
+        const user = JSON.parse(userlogin_string);
+        
+        if (user.islogin === false) {
+            alert('Please login so you can book your destination.');
+            window.location.href = "login.html";
+        }
+    });
+} 
