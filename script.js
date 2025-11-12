@@ -369,13 +369,15 @@ const accommodationContainer = document.getElementById('Accommodation_container_
 
 if (accommodationContainer) {
     accommodationContainer.addEventListener('click', (e) => { 
+        const arr_lables = document.querySelectorAll('.Accommodation_card_iteam');
+        arr_lables.forEach(lable => {
+            // console.log(lable);
+            lable.classList.remove('active-card');
+        });
         if (e.target.name == 'accommodation' && e.target.type == 'radio') {
-            const arr_lables = document.querySelectorAll('.Accommodation_card_iteam');
-            arr_lables.forEach(lable => {
-                if (lable.classList.) {
-                    
-                }
-            });
+            let selected_acc = e.target.closest('label');
+            selected_acc.classList.add('active-card');
+            console.log(selected_acc);
         }        
         Calculat_price();
     });
