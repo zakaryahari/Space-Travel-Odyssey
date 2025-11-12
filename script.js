@@ -307,13 +307,18 @@ function Passenger_inputset(val) {
 // function Add_multi_passenger() {
     
 // }
-let add_passenger_counter = 3;
 let radio_option ;
 
 if (add_passenger_btn) {
+
     
     add_passenger_btn.addEventListener('click' , ()=>{
-        Passenger_inputset_load_inputs_single(add_passenger_counter);        
+        const allFirstNameInputs = document.querySelectorAll('input[name="firstName[]"]');
+        // console.log(allFirstNameInputs.length);
+        let add_passenger_counter = allFirstNameInputs.length;
+
+        Passenger_inputset_load_inputs_single(add_passenger_counter);      
+        Calculat_price();
     });
 
 }
@@ -368,7 +373,8 @@ function Calculat_price() {
     }
 
     const selectedAccommId = checkedAccommInput.value;
-    const passengerValue = parseInt(checkedPassengerInput.value);
+    const allFirstNameInputs = document.querySelectorAll('input[name="firstName[]"]');
+    const actualPassengerCount = allFirstNameInputs.length;
 
     const destObject = findDataById(destinations_data, selectedDestId);
     const accommObject = findDataById(accommodation_data, selectedAccommId);
@@ -381,7 +387,7 @@ function Calculat_price() {
 
     Total_price += accommObject.pricePerDay ; 
 
-    Total_price *= passengerValue;
+    Total_price *= actualPassengerCount;
 
     totalpriceInput.textContent = `$${Total_price.toLocaleString()}.00`;
 }
