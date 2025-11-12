@@ -358,13 +358,17 @@ function Calculat_price() {
     // const radio_container = document.getElementById('radio_container');
     const totalpriceInput = document.getElementById('total-price');
 
-    const checkedInput = document.querySelector(`input[name="accommodation"]:checked`);
-    const radio_option = document.querySelector(`input[name="passengers"]:checked`);
+    const selectedDestId = destination_select_input.value;
+    const checkedAccommInput = document.querySelector('input[name="accommodation"]:checked');
+    const checkedPassengerInput = document.querySelector('input[name="passengers"]:checked');
 
-    if (destination_select_input === 'default_option' || !destination_select_input || !checkedInput || !radio_option) {
+    if (destination_select_input === 'default_option' || !checkedAccommInput || !checkedPassengerInput) {
         totalpriceInput.textContent = '$0.00';
         return;
     }
+
+    const selectedAccommId = checkedAccommInput.value;
+    const passengerValue = parseInt(checkedPassengerInput.value);
 
     const destObject = findDataById(destinations_data, selectedDestId);
     const accommObject = findDataById(accommodation_data, selectedAccommId);
@@ -373,21 +377,13 @@ function Calculat_price() {
         totalpriceInput.textContent = '$0.00 (Data Error)';
         return;
     }
-
     Total_price += destObject.price;
 
-    Total_price += accommObject.pricePerDay;
+    Total_price += accommObject.pricePerDay ; 
 
-    Total_price *= radio_option.value; 
+    Total_price *= passengerValue;
 
-    totalpriceInput.textContent = `$${Total_price}.00`;
-
-
-    // const optionObject = booking_option_data.passengerOptions.find(opt => opt.value === selectedPassengerOptionId);
-
-
-    // console.log(checkedInput);
-    
+    totalpriceInput.textContent = `$${Total_price.toLocaleString()}.00`;
 }
 
 
