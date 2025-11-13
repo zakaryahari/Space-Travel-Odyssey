@@ -6,6 +6,8 @@ let spacecraft_data = [];
 let booking_option_data = [];
 
 
+let My_Booking = [];
+
 const SESSION_KEY = 'login';
 const VALID_EMAIL = 'zakaryahari42@gmail.com';
 
@@ -34,7 +36,7 @@ if (submit_login_btn) {
             console.log('valide');
             Login_info_valid();
             window.location.href = 'index.html';
-            console.log('rihab');
+            // console.log('rihab');
         }
         else {
             alert('Invalide user info , Please Try Again with the corect info.');
@@ -300,7 +302,7 @@ function Passenger_inputset_load_inputs(val) {
                             <div class="col-span-2">
                                 <label for="requirements" class="block mb-2 font-semibold text-gray-200">Special
                                     Requirements</label>
-                                <textarea id="requirements" name="requirements"
+                                <textarea id="requirements" name="requirements[]"
                                     placeholder="Any special requirements or notes..."
                                     class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors min-h-[100px]"></textarea>
                             </div>
@@ -344,7 +346,7 @@ function Passenger_inputset_load_inputs_single(val) {
                             <div class="col-span-2">
                                 <label for="requirements" class="block mb-2 font-semibold text-gray-200">Special
                                     Requirements</label>
-                                <textarea id="requirements" name="requirements"
+                                <textarea id="requirements" name="requirements[]"
                                     placeholder="Any special requirements or notes..."
                                     class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors min-h-[100px]"></textarea>
                             </div>
@@ -473,9 +475,11 @@ function Calculat_price() {
     }
     Total_price += destObject.price;
 
-    Total_price += accommObject.pricePerDay;
+    // Total_price += accommObject.pricePerDay;
 
-    Total_price *= actualPassengerCount * travelDuration * 2;
+    let temp = accommObject.pricePerDay * actualPassengerCount * travelDuration * 2;
+
+    Total_price += temp;
 
     totalpriceInput.textContent = `$${Total_price.toLocaleString()}.00`;
 }
@@ -494,6 +498,12 @@ if (confirm_booking_btn) {
             alert('Please login so you can book your destination.');
             window.location.href = "login.html";
         }
+        // Get_all_inputset_data();
+        let check = Valide_Form();
+        if (check === false) {
+            alert('plz make sure to fix the error above !!');
+        }
+        // window.print();
     });
 } 
 
@@ -509,46 +519,6 @@ const phone_input_spanId = 'phone-errormsg';
 const Message_input_spanId = 'message-errormsg';
 
 
-// let namePattern = /^[A-Za-z]+(?:[\sA-Za-z])+(?:[\sA-Za-z]){2,}$/;
-
-// let emailPattern = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
-
-// // let phonePattern = /^\+?[\d\s\-\(\)]+$/;
-
-// let phonePattern = /^\+?\+212+\d{8,9}$/;
- 
-
-// let MsgPattern = /^.{10,}$/;
-// let isvalid = true;
-
-// function Check_input_regex(input , regex , msgerror) {
-    
-// }
-
-// if (Passenger_inputset_container) {
-//     Passenger_inputset_container.addEventListener('input',(e)=>{
-//         if (e.target.closest('first-name-1')) {
-//             const input = e.target.closest('first-name-1');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//         if (e.target.closest('last-name-1')) {
-//             const input = e.target.closest('last-name-1');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//         if (e.target.closest('email-1')) {
-//             const input = e.target.closest('email-1');
-//             Check_input_regex(input,emailPattern,Name_msg_error);
-//         }
-//         if (e.target.closest('phone-1')) {
-//             const input = e.target.closest('phone-1');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//         if (e.target.closest('requirements')) {
-//             const input = e.target.closest('requirements');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//     });
-// }
 
 const NAME_REGEX = /^[A-Za-z]+(?:[\sA-Za-z])+$/;
 const EMAIL_REGEX = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,3}$/; 
@@ -604,10 +574,161 @@ if (Passenger_inputset_container) {
             case 'phone[]':
                 Check_input_regex(target, PHONE_REGEX, Phone_msg_error, phone_input_spanId);
                 break;
-            case 'requirements':
+            case 'requirements[]':
                 Check_input_regex(target, REQ_REGEX, message_msg_error, Message_input_spanId);
                 break;
         }
          
     });
 }
+
+
+function Get_all_inputset_data() {
+    
+    
+
+
+    // const Array_Last_name_Values = Array.from(lastNameElements).map(input => input.value);
+    // const Array_Email_Values = Array.from(emailElements).map(input => input.value);
+    // const Array_Phone_Values = Array.from(phoneElements).map(input => input.value);
+
+    // // 3. Log the final array of values
+    // console.log(Array_First_name_Values);
+    // console.log(Array_Last_name_Values);
+    // console.log(Array_Email_Values);
+    // console.log(Array_Phone_Values);
+    // console.log(Array_Message_Values);
+
+
+}
+
+
+function Valide_Form() {
+
+    let Array_First_name_Values = [];
+    let Array_Last_name_Values = [];
+    let Array_Email_Values = [];
+    let Array_Phone_Values = [];
+    let Array_Message_Values = [];
+
+    const firstNameElements = document.querySelectorAll('input[name="firstName[]"]');
+    const lastNameElements = document.querySelectorAll('input[name="lastName[]"]');
+    const emailElements = document.querySelectorAll('input[name="email[]"]');
+    const phoneElements = document.querySelectorAll('input[name="phone[]"]');
+    // const messageElements = document.querySelectorAll('textarea[name="requirements[]"]');
+    const messageElements = document.querySelectorAll('textarea[name="requirements[]"]');
+
+    firstNameElements.forEach(F_name_val => {Array_First_name_Values.push(F_name_val.value)});
+    lastNameElements.forEach(L_name_val => {Array_Last_name_Values.push(L_name_val.value)});
+    emailElements.forEach(Email_val => {Array_Email_Values.push(Email_val.value)});
+    phoneElements.forEach(Phone_val => {Array_Phone_Values.push(Phone_val.value)});
+    messageElements.forEach(Message_val => {
+        const trimmedValue = Message_val.value.trim();
+        
+            // Only push the message if the field is NOT empty
+            if (trimmedValue !== '') { 
+                Array_Message_Values.push(trimmedValue);
+            }
+    });
+
+
+
+    let Is_Form_valid = true ;
+
+    Array_First_name_Values.forEach(val => {
+        if (!NAME_REGEX.test(val) && val !== '') {
+            Is_Form_valid = false;
+            console.log('false');
+        }
+        if (val === '') {
+            Is_Form_valid = false;
+        }
+    });
+
+    Array_Last_name_Values.forEach(val => {
+        if (!NAME_REGEX.test(val) && val !== '') {
+            Is_Form_valid = false;
+            console.log('false');
+        }
+        if (val === '') {
+            Is_Form_valid = false;
+        }
+    });
+
+    Array_Email_Values.forEach(val => {
+        if (!EMAIL_REGEX.test(val) && val !== '') {
+            Is_Form_valid = false;
+            console.log('false');
+        }
+        if (val === '') {
+            Is_Form_valid = false;
+        }
+    });
+
+    Array_Phone_Values.forEach(val => {
+        if (!PHONE_REGEX.test(val) && val !== '') {
+            Is_Form_valid = false;
+            console.log('false');
+        }
+        if (val === '') {
+            Is_Form_valid = false;
+        }
+    });
+
+    Array_Message_Values.forEach(val => {
+        if (!REQ_REGEX.test(val) && val !== '') {
+            Is_Form_valid = false;
+            console.log('false');
+        }
+        if (val === '') {
+            Is_Form_valid = false;
+        }
+    });
+
+    return Is_Form_valid;
+}
+
+// function Add_new_booking() {
+    
+// }
+
+
+// let namePattern = /^[A-Za-z]+(?:[\sA-Za-z])+(?:[\sA-Za-z]){2,}$/;
+
+// let emailPattern = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+
+// // let phonePattern = /^\+?[\d\s\-\(\)]+$/;
+
+// let phonePattern = /^\+?\+212+\d{8,9}$/;
+ 
+// let MsgPattern = /^.{10,}$/;
+// let isvalid = true;
+
+// function Check_input_regex(input , regex , msgerror) {
+    
+// }
+
+// if (Passenger_inputset_container) {
+//     Passenger_inputset_container.addEventListener('input',(e)=>{
+//         if (e.target.closest('first-name-1')) {
+//             const input = e.target.closest('first-name-1');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//         if (e.target.closest('last-name-1')) {
+//             const input = e.target.closest('last-name-1');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//         if (e.target.closest('email-1')) {
+//             const input = e.target.closest('email-1');
+//             Check_input_regex(input,emailPattern,Name_msg_error);
+//         }
+//         if (e.target.closest('phone-1')) {
+//             const input = e.target.closest('phone-1');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//         if (e.target.closest('requirements')) {
+//             const input = e.target.closest('requirements');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//     });
+// }
