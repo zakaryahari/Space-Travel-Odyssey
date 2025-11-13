@@ -392,7 +392,7 @@
                             <div class="col-span-2">
                                 <label for="requirements" class="block mb-2 font-semibold text-gray-200">Special
                                     Requirements</label>
-                                <textarea id="requirements" name="requirements"
+                                <textarea id="requirements" name="requirements[]"
                                     placeholder="Any special requirements or notes..."
                                     class="w-full p-3 rounded-lg bg-space-blue border border-neon-blue/30 text-white focus:border-neon-blue focus:outline-none transition-colors min-h-[100px]"></textarea>
                             </div>
@@ -424,7 +424,7 @@
                 </div>
 
                 <div class="mt-6">
-                    <button type="submit" id="confirm-booking-btn"
+                    <button type="button" id="confirm-booking-btn"
                         class="btn-primary px-6 py-4 rounded-lg font-bold text-white w-full text-xl shadow-2xl shadow-neon-blue/30">
                         Confirm Booking
                     </button>
