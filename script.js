@@ -191,6 +191,56 @@ function Afficher_Accommodation(ID) {
     }
 }
 
+function Afficher_Destination(Dis_arr) {
+    const Destination_container_id = document.querySelector('.description_destination_card');
+
+    if (Dis_arr !== null) {
+        console.log('im inside the destination hhh');
+        if (Destination_container_id) {
+            Destination_container_id.innerHTML = '';
+
+                        const destination_card = `
+                            <div class="planet-card p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                                <div class="lg:order-2 flex justify-center">
+                                    <div
+                                        class="w-64 h-64 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center glow">
+                                        <i class="fas fa-globe-americas text-white text-6xl"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="font-orbitron text-3xl mb-4 text-glow">${Dis_arr.name}</h2>
+                                    <p class="text-gray-300 mb-4 text-1xl">${Dis_arr.description}
+                                    </p>
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div class="bg-space-blue/70 p-4 rounded-lg">
+                                            <h4 class="font-orbitron text-neon-blue mb-2">Journey Time</h4>
+                                            <p class="text-gray-300">${Dis_arr.travelDuration}</p>
+                                        </div>
+                                        <div class="bg-space-blue/70 p-4 rounded-lg">
+                                            <h4 class="font-orbitron text-neon-blue mb-2">Gravity</h4>
+                                            <p class="text-gray-300">${Dis_arr.gravity}</p>
+                                        </div>
+                                        <div class="bg-space-blue/70 p-4 rounded-lg">
+                                            <h4 class="font-orbitron text-neon-blue mb-2">Temperature</h4>
+                                            <p class="text-gray-300">${Dis_arr.temperature}</p>
+                                        </div>
+                                        <div class="bg-space-blue/70 p-4 rounded-lg">
+                                            <h4 class="font-orbitron text-neon-blue mb-2">Atmosphere</h4>
+                                            <p class="text-gray-300">${Dis_arr.atmosphere}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        Destination_container_id.innerHTML += destination_card;
+        }
+    }else{
+        console.log('im inside the destination hhhihsdgjqghsdkgkqds');
+        Destination_container_id.innerHTML = '';
+    }
+
+}
+
 const destination = document.getElementById('destination');
 const totalprice_input = document.getElementById('total-price');
 
@@ -198,18 +248,20 @@ if (destination) {
 
     destination.addEventListener('change', (e) => {
         // console.log(e.target.value);
-        let selected_destination = [];
+        let selected_destinations ;
         destinations_data.forEach(destinations_val => {
             if (e.target.value === destinations_val.id) {
-                selected_destination = destinations_val;
-                Afficher_Accommodation(selected_destination.id);
-                console.log(selected_destination.id);
+                selected_destinations = destinations_val;
+                Afficher_Accommodation(selected_destinations.id);
+                Afficher_Destination(selected_destinations);
+                console.log(selected_destinations);
             }
 
             // console.log(e.target.value);
         });
         if (e.target.value === 'default_option') {
             Afficher_Accommodation(null);
+            Afficher_Destination(null);
         }
     });
     Calculat_price();
@@ -395,6 +447,9 @@ function Calculat_price() {
     const totalpriceInput = document.getElementById('total-price');
 
     const selectedDestId = destination_select_input.value;
+
+    // const travelDuration = destinations_data.filter(des => des.id == selectedDestId);
+    // console.log(travelDuration.forEach(tr => {console.log(tr.travelDuration)}));
     const checkedAccommInput = document.querySelector('input[name="accommodation"]:checked');
     const checkedPassengerInput = document.querySelector('input[name="passengers"]:checked');
 
@@ -410,6 +465,8 @@ function Calculat_price() {
     const destObject = findDataById(destinations_data, selectedDestId);
     const accommObject = findDataById(accommodation_data, selectedAccommId);
 
+    const travelDuration = parseInt(document.getElementById('travelDuration').value);
+
     if (!destObject || !accommObject) {
         totalpriceInput.textContent = '$0.00 (Data Error)';
         return;
@@ -418,7 +475,7 @@ function Calculat_price() {
 
     Total_price += accommObject.pricePerDay;
 
-    Total_price *= actualPassengerCount;
+    Total_price *= actualPassengerCount * travelDuration * 2;
 
     totalpriceInput.textContent = `$${Total_price.toLocaleString()}.00`;
 }
@@ -439,3 +496,118 @@ if (confirm_booking_btn) {
         }
     });
 } 
+
+const Name_msg_error = 'Please enter a valid name.';
+const Email_msg_error = 'Please enter a valid Email.';
+const Phone_msg_error = 'Please enter a valid phone number (10 digits).';
+const message_msg_error = 'Please enter a Msg / min 10Le';
+
+const first_name_spanId = 'first-name-errormsg';
+const email_input_spanId = 'email-errormsg';
+const last_name_spanId = 'last-name-errormsg';
+const phone_input_spanId = 'phone-errormsg';
+const Message_input_spanId = 'message-errormsg';
+
+
+// let namePattern = /^[A-Za-z]+(?:[\sA-Za-z])+(?:[\sA-Za-z]){2,}$/;
+
+// let emailPattern = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+
+// // let phonePattern = /^\+?[\d\s\-\(\)]+$/;
+
+// let phonePattern = /^\+?\+212+\d{8,9}$/;
+ 
+
+// let MsgPattern = /^.{10,}$/;
+// let isvalid = true;
+
+// function Check_input_regex(input , regex , msgerror) {
+    
+// }
+
+// if (Passenger_inputset_container) {
+//     Passenger_inputset_container.addEventListener('input',(e)=>{
+//         if (e.target.closest('first-name-1')) {
+//             const input = e.target.closest('first-name-1');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//         if (e.target.closest('last-name-1')) {
+//             const input = e.target.closest('last-name-1');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//         if (e.target.closest('email-1')) {
+//             const input = e.target.closest('email-1');
+//             Check_input_regex(input,emailPattern,Name_msg_error);
+//         }
+//         if (e.target.closest('phone-1')) {
+//             const input = e.target.closest('phone-1');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//         if (e.target.closest('requirements')) {
+//             const input = e.target.closest('requirements');
+//             Check_input_regex(input,namePattern,Name_msg_error);
+//         }
+//     });
+// }
+
+const NAME_REGEX = /^[A-Za-z]+(?:[\sA-Za-z])+$/;
+const EMAIL_REGEX = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,3}$/; 
+const PHONE_REGEX = /^\+212\d{8,9}$/; 
+const REQ_REGEX = /^.{10,250}$/;
+
+
+function Check_input_regex(inputElement, regex, msgerror, errorSpanId) {
+    const value = inputElement.value.trim();
+    let isValid = regex.test(value);
+
+        if (value === '') {
+        
+        inputElement.classList.remove('border-red-500', 'border-green-500'); 
+        
+        return true; 
+    }
+
+    if (inputElement.required && value === '') {
+        isValid = false;
+        msgerror = 'This field is required.';
+    }
+
+
+    if (isValid) {
+
+        inputElement.classList.remove('border-red-500'); 
+        inputElement.classList.add('border-green-500');
+
+    } else {
+
+        inputElement.classList.remove('border-green-500'); 
+        inputElement.classList.add('border-red-500');
+
+    }
+    return isValid;
+}
+
+
+if (Passenger_inputset_container) {
+    Passenger_inputset_container.addEventListener('input', (e) => {
+        
+        const target = e.target;
+
+        switch (target.name) {
+            case 'firstName[]':
+            case 'lastName[]':
+                Check_input_regex(target, NAME_REGEX, Name_msg_error, first_name_spanId);
+                break;
+            case 'email[]':
+                Check_input_regex(target, EMAIL_REGEX, Email_msg_error, email_input_spanId);
+                break;
+            case 'phone[]':
+                Check_input_regex(target, PHONE_REGEX, Phone_msg_error, phone_input_spanId);
+                break;
+            case 'requirements':
+                Check_input_regex(target, REQ_REGEX, message_msg_error, Message_input_spanId);
+                break;
+        }
+         
+    });
+}
