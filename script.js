@@ -499,10 +499,14 @@ if (confirm_booking_btn) {
             window.location.href = "login.html";
         }
         // Get_all_inputset_data();
-        Add_new_booking();
         let check = Valide_Form();
+
         if (check === false) {
             alert('plz make sure to fix the error above !!');
+        }
+        else{
+            Add_new_booking();
+            alert('Your booking is saved!');
         }
         // window.print();
     });
@@ -754,42 +758,101 @@ const ALL_BOOKINGS_KEY = 'ALL_BOOKING';
 }
 
 
-// let namePattern = /^[A-Za-z]+(?:[\sA-Za-z])+(?:[\sA-Za-z]){2,}$/;
+function getAllBookings() {
+    const bookingsString = localStorage.getItem('ALL_BOOKING');
 
-// let emailPattern = /^[\w.-]+@[\w.-]+\.[A-Za-z]{2,}$/;
+    return bookingsString ? JSON.parse(bookingsString) : [];
+}
 
-// // let phonePattern = /^\+?[\d\s\-\(\)]+$/;
-
-// let phonePattern = /^\+?\+212+\d{8,9}$/;
- 
-// let MsgPattern = /^.{10,}$/;
-// let isvalid = true;
-
-// function Check_input_regex(input , regex , msgerror) {
+function generatePassengerDetailsHtml(booking) {
+    let passengerHtml = '';
     
-// }
+    booking.passengers.forEach((p, index) => {
 
-// if (Passenger_inputset_container) {
-//     Passenger_inputset_container.addEventListener('input',(e)=>{
-//         if (e.target.closest('first-name-1')) {
-//             const input = e.target.closest('first-name-1');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//         if (e.target.closest('last-name-1')) {
-//             const input = e.target.closest('last-name-1');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//         if (e.target.closest('email-1')) {
-//             const input = e.target.closest('email-1');
-//             Check_input_regex(input,emailPattern,Name_msg_error);
-//         }
-//         if (e.target.closest('phone-1')) {
-//             const input = e.target.closest('phone-1');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//         if (e.target.closest('requirements')) {
-//             const input = e.target.closest('requirements');
-//             Check_input_regex(input,namePattern,Name_msg_error);
-//         }
-//     });
-// }
+        passengerHtml += `
+            <div class="space-y-1 ${index > 0 ? 'mt-4 pt-4 border-t border-space-blue' : ''}">
+                <p class="font-orbitron text-md text-neon-blue">Passenger N°${p.id}: ${p.firstName} ${p.lastName}</p>
+                <div class="grid grid-cols-2 text-gray-400 text-sm">
+                    <span>Email: <span class="text-white">${p.email}</span></span>
+                    <span>Phone: <span class="text-white">${p.phone}</span></span>
+                </div>
+                ${p.requirements ? `<p class="text-sm italic text-gray-500 mt-2">Special Note: ${p.requirements}</p>` : ''}
+            </div>
+        `;
+    });
+    return passengerHtml;
+}
+
+
+function renderMyBookings() {
+    const listContainer = document.getElementById('bookings-list-container');
+    const bookings = getAllBookings();
+    
+
+    
+    let bookingHtml = '';
+    
+    bookings.forEach(booking => {
+        // let count = index + 1;
+        
+        const passengerCount = booking.passengers.length;
+        
+
+        const detailedPassengerHtml = generatePassengerDetailsHtml(booking);
+        
+        bookingHtml += `
+            <div class="booking-card p-4 space-y-3">
+                
+
+                <div class="grid grid-cols-6 md:grid-cols-8 gap-4 items-center">
+
+                    <div class="col-span-3 md:col-span-2">
+                        <p class="text-neon-cyan font-orbitron text-lg">Booking ID: ${booking.id.substring(0, 8)}</p>
+                        
+                    </div>
+
+                    <div class="col-span-1 md:col-span-2 text-center">
+                        <p class="text-gray-300 font-semibold">${booking.travelDate}</p>
+                        <p class="text-gray-500 text-xs">${passengerCount} Travelers</p>
+                    </div>
+
+                    <div class="col-span-2 md:col-span-2 text-right">
+                        <p class="font-bold text-xl text-neon-blue">${booking.finalPrice}</p>
+                    </div>
+                    
+                    <div class="actions-cell col-span-6 md:col-span-2 flex justify-end space-x-2">
+                        <button class="bg-neon-blue/20 text-neon-blue px-3 py-1 rounded text-xs hover:bg-neon-blue/30" onclick="toggleDetails('${booking.id}')">
+                            <i class="fas fa-eye mr-1"></i> Details
+                        </button>
+                        <button class="bg-neon-purple/20 text-neon-purple px-3 py-1 rounded text-xs hover:bg-neon-purple/30" onclick="editBooking('${booking.id}')">Edit</button>
+                        <button class="bg-red-600/20 text-red-400 px-3 py-1 rounded text-xs hover:bg-red-600/30" onclick="cancelBooking('${booking.id}')">Cancel</button>
+                    </div>
+                </div>
+                
+                <div id="details-${booking.id}" class="hidden p-4 border border-neon-cyan/10 rounded-lg">
+                    <h4 class="font-orbitron text-lg mb-3 border-b border-neon-cyan/20 pb-2 text-neon-cyan">Passenger Manifest</h4>
+                    ${detailedPassengerHtml}
+                    <button class="mt-4 bg-neon-blue/20 text-neon-blue px-3 py-1 rounded text-xs hover:bg-neon-blue/30" onclick="viewTicket('${booking.id}')">View Printable Ticket</button>
+                </div>
+
+            </div>
+        `;
+    });
+    
+    listContainer.innerHTML = bookingHtml;
+}
+
+
+function toggleDetails(bookingId) {
+    const detailElement = document.getElementById(`details-${bookingId}`);
+    if (detailElement) {
+        detailElement.classList.toggle('hidden');
+    }
+}
+
+const booking_card = document.querySelector('.booking-card');
+
+if (booking_card) {
+    renderMyBookings();
+}
+
