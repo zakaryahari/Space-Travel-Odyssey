@@ -36,7 +36,7 @@ if (submit_login_btn) {
             console.log('valide');
             Login_info_valid();
             window.location.href = 'index.html';
-            // console.log('rihab');
+            
         }
         else {
             alert('Invalide user info , Please Try Again with the corect info.');
@@ -499,6 +499,7 @@ if (confirm_booking_btn) {
             window.location.href = "login.html";
         }
         // Get_all_inputset_data();
+        Add_new_booking();
         let check = Valide_Form();
         if (check === false) {
             alert('plz make sure to fix the error above !!');
@@ -584,26 +585,6 @@ if (Passenger_inputset_container) {
 
 
 function Get_all_inputset_data() {
-    
-    
-
-
-    // const Array_Last_name_Values = Array.from(lastNameElements).map(input => input.value);
-    // const Array_Email_Values = Array.from(emailElements).map(input => input.value);
-    // const Array_Phone_Values = Array.from(phoneElements).map(input => input.value);
-
-    // // 3. Log the final array of values
-    // console.log(Array_First_name_Values);
-    // console.log(Array_Last_name_Values);
-    // console.log(Array_Email_Values);
-    // console.log(Array_Phone_Values);
-    // console.log(Array_Message_Values);
-
-
-}
-
-
-function Valide_Form() {
 
     let Array_First_name_Values = [];
     let Array_Last_name_Values = [];
@@ -625,17 +606,57 @@ function Valide_Form() {
     messageElements.forEach(Message_val => {
         const trimmedValue = Message_val.value.trim();
         
-            // Only push the message if the field is NOT empty
             if (trimmedValue !== '') { 
                 Array_Message_Values.push(trimmedValue);
             }
     });
 
+    return {
+        firstNames: Array_First_name_Values,
+        lastNames: Array_Last_name_Values,
+        emails: Array_Email_Values,
+        phones: Array_Phone_Values,
+        messages: Array_Message_Values
+    };
+
+}
+
+
+function Valide_Form() {
+
+    const formData = Get_all_inputset_data();
+
+    // let Array_First_name_Values = [];
+    // let Array_Last_name_Values = [];
+    // let Array_Email_Values = [];
+    // let Array_Phone_Values = [];
+    // let Array_Message_Values = [];
+
+    // const firstNameElements = document.querySelectorAll('input[name="firstName[]"]');
+    // const lastNameElements = document.querySelectorAll('input[name="lastName[]"]');
+    // const emailElements = document.querySelectorAll('input[name="email[]"]');
+    // const phoneElements = document.querySelectorAll('input[name="phone[]"]');
+    // // const messageElements = document.querySelectorAll('textarea[name="requirements[]"]');
+    // const messageElements = document.querySelectorAll('textarea[name="requirements[]"]');
+
+    // firstNameElements.forEach(F_name_val => {Array_First_name_Values.push(F_name_val.value)});
+    // lastNameElements.forEach(L_name_val => {Array_Last_name_Values.push(L_name_val.value)});
+    // emailElements.forEach(Email_val => {Array_Email_Values.push(Email_val.value)});
+    // phoneElements.forEach(Phone_val => {Array_Phone_Values.push(Phone_val.value)});
+    // messageElements.forEach(Message_val => {
+    //     const trimmedValue = Message_val.value.trim();
+        
+    //         // Only push the message if the field is NOT empty
+    //         if (trimmedValue !== '') { 
+    //             Array_Message_Values.push(trimmedValue);
+    //         }
+    // });
+
 
 
     let Is_Form_valid = true ;
 
-    Array_First_name_Values.forEach(val => {
+    formData.firstNames.forEach(val => {
         if (!NAME_REGEX.test(val) && val !== '') {
             Is_Form_valid = false;
             console.log('false');
@@ -645,7 +666,7 @@ function Valide_Form() {
         }
     });
 
-    Array_Last_name_Values.forEach(val => {
+    formData.lastNames.forEach(val => {
         if (!NAME_REGEX.test(val) && val !== '') {
             Is_Form_valid = false;
             console.log('false');
@@ -655,7 +676,7 @@ function Valide_Form() {
         }
     });
 
-    Array_Email_Values.forEach(val => {
+    formData.emails.forEach(val => {
         if (!EMAIL_REGEX.test(val) && val !== '') {
             Is_Form_valid = false;
             console.log('false');
@@ -665,7 +686,7 @@ function Valide_Form() {
         }
     });
 
-    Array_Phone_Values.forEach(val => {
+    formData.phones.forEach(val => {
         if (!PHONE_REGEX.test(val) && val !== '') {
             Is_Form_valid = false;
             console.log('false');
@@ -675,7 +696,7 @@ function Valide_Form() {
         }
     });
 
-    Array_Message_Values.forEach(val => {
+    formData.messages.forEach(val => {
         if (!REQ_REGEX.test(val) && val !== '') {
             Is_Form_valid = false;
             console.log('false');
@@ -688,9 +709,49 @@ function Valide_Form() {
     return Is_Form_valid;
 }
 
-// function Add_new_booking() {
+function Add_new_booking() {
+const ALL_BOOKINGS_KEY = 'ALL_BOOKING';
+    const formData = Get_all_inputset_data();
+    const destinationSelect = document.getElementById('destination');
+    const travelDateInput = document.getElementById('travel-date');
+    const totalpriceInput = document.getElementById('total-price');
+
+    const structuredPassengers = [];
+    const passengerCount = formData.firstNames.length;
     
-// }
+    for (let i = 0; i < passengerCount; i++) {
+        structuredPassengers.push({
+            id: i + 1,
+            firstName: formData.firstNames[i],
+            lastName: formData.lastNames[i],
+            email: formData.emails[i],
+            phone: formData.phones[i],
+            requirements: formData.messages[i] || null
+        });
+    }
+
+    const bookingID = Date.now().toString() + Math.floor(Math.random() * 1000); 
+
+    const newBooking = {
+        id: bookingID,
+        userId: JSON.parse(localStorage.getItem(SESSION_KEY)).user,
+        destinationId: destinationSelect.value,
+        travelDate: travelDateInput.value,
+        passengers: structuredPassengers,
+        finalPrice: totalpriceInput.textContent,
+        dateBooked: new Date().toISOString()
+    };
+
+    const existingBookingsString = localStorage.getItem(ALL_BOOKINGS_KEY);
+    const existingBookings = existingBookingsString ? JSON.parse(existingBookingsString) : [];
+
+    existingBookings.push(newBooking);
+    localStorage.setItem('ALL_BOOKING', JSON.stringify(existingBookings));
+
+    My_Booking.push(newBooking); 
+    
+    console.log(My_Booking);
+}
 
 
 // let namePattern = /^[A-Za-z]+(?:[\sA-Za-z])+(?:[\sA-Za-z]){2,}$/;
