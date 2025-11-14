@@ -824,8 +824,8 @@ function renderMyBookings() {
                         <button class="bg-neon-blue/20 text-neon-blue px-3 py-1 rounded text-xs hover:bg-neon-blue/30" onclick="toggleDetails('${booking.id}')">
                             <i class="fas fa-eye mr-1"></i> Details
                         </button>
-                        <button class="bg-neon-purple/20 text-neon-purple px-3 py-1 rounded text-xs hover:bg-neon-purple/30" onclick="editBooking('${booking.id}')">Edit</button>
-                        <button class="bg-red-600/20 text-red-400 px-3 py-1 rounded text-xs hover:bg-red-600/30" onclick="cancelBooking('${booking.id}')">Cancel</button>
+                        <button class="bg-neon-purple/20 text-neon-purple px-3 py-1 rounded text-xs hover:bg-neon-purple/30" value=${booking.id}>Edit</button>
+                        <button class="Cancel_btn_input bg-red-600/20 text-red-400 px-3 py-1 rounded text-xs hover:bg-red-600/30" value=${booking.id}>Cancel</button>
                     </div>
                 </div>
                 
@@ -854,5 +854,32 @@ const booking_card = document.querySelector('.booking-card');
 
 if (booking_card) {
     renderMyBookings();
+
+    
+    const bookingsListContainer = document.getElementById('bookings-list-container');
+    
+    if (bookingsListContainer) {
+        bookingsListContainer.addEventListener('click', (e) => {
+            
+            const cancelButton = e.target.closest('.Cancel_btn_input'); 
+            console.log(cancelButton.value);
+
+            Cancel_booking(cancelButton.value);
+        });
+    }
 }
 
+function Cancel_booking(bookingId) {
+
+const confirmed = window.confirm("Are you sure you want to cancel this?");
+    
+    if (confirmed) {
+        let bookings = getAllBookings();
+        
+        const updatedBookings = bookings.filter(b => b.id !== bookingId);
+
+        localStorage.setItem('ALL_BOOKING', JSON.stringify(updatedBookings));
+
+        renderMyBookings(); 
+    }
+}
