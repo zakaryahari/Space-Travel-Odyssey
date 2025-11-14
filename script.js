@@ -507,6 +507,9 @@ if (confirm_booking_btn) {
         else{
             Add_new_booking();
             alert('Your booking is saved!');
+            const form_booking = document.querySelector('.booking-form');
+            form_booking.reset();
+            window.location.href = 'my_booking.html';
         }
         // window.print();
     });
@@ -629,34 +632,6 @@ function Get_all_inputset_data() {
 function Valide_Form() {
 
     const formData = Get_all_inputset_data();
-
-    // let Array_First_name_Values = [];
-    // let Array_Last_name_Values = [];
-    // let Array_Email_Values = [];
-    // let Array_Phone_Values = [];
-    // let Array_Message_Values = [];
-
-    // const firstNameElements = document.querySelectorAll('input[name="firstName[]"]');
-    // const lastNameElements = document.querySelectorAll('input[name="lastName[]"]');
-    // const emailElements = document.querySelectorAll('input[name="email[]"]');
-    // const phoneElements = document.querySelectorAll('input[name="phone[]"]');
-    // // const messageElements = document.querySelectorAll('textarea[name="requirements[]"]');
-    // const messageElements = document.querySelectorAll('textarea[name="requirements[]"]');
-
-    // firstNameElements.forEach(F_name_val => {Array_First_name_Values.push(F_name_val.value)});
-    // lastNameElements.forEach(L_name_val => {Array_Last_name_Values.push(L_name_val.value)});
-    // emailElements.forEach(Email_val => {Array_Email_Values.push(Email_val.value)});
-    // phoneElements.forEach(Phone_val => {Array_Phone_Values.push(Phone_val.value)});
-    // messageElements.forEach(Message_val => {
-    //     const trimmedValue = Message_val.value.trim();
-        
-    //         // Only push the message if the field is NOT empty
-    //         if (trimmedValue !== '') { 
-    //             Array_Message_Values.push(trimmedValue);
-    //         }
-    // });
-
-
 
     let Is_Form_valid = true ;
 
@@ -832,7 +807,7 @@ function renderMyBookings() {
                 <div id="details-${booking.id}" class="hidden p-4 border border-neon-cyan/10 rounded-lg">
                     <h4 class="font-orbitron text-lg mb-3 border-b border-neon-cyan/20 pb-2 text-neon-cyan">Passenger Manifest</h4>
                     ${detailedPassengerHtml}
-                    <button class="mt-4 bg-neon-blue/20 text-neon-blue px-3 py-1 rounded text-xs hover:bg-neon-blue/30" onclick="viewTicket('${booking.id}')">View Printable Ticket</button>
+                    <button class="Print_btn_input mt-4 bg-neon-blue/20 text-neon-blue px-3 py-1 rounded text-xs hover:bg-neon-blue/30" value=${booking.id}>View Printable Ticket</button>
                 </div>
 
             </div>
@@ -853,6 +828,16 @@ function toggleDetails(bookingId) {
 const booking_card = document.querySelector('.booking-card');
 
 if (booking_card) {
+    const userlogin_string = localStorage.getItem('login');
+    const user = JSON.parse(userlogin_string);
+
+    if (user.islogin === false) {
+        // alert('Please login so you can book your destination.');
+        const my_booking_paragrahe = document.getElementsByClassName('my_booking_paragrahe');
+        my_booking_paragrahe.textContent = 'Please login so you can book your destination.';
+    }
+    if (user.islogin === true) {
+
     renderMyBookings();
 
     
@@ -861,17 +846,26 @@ if (booking_card) {
     if (bookingsListContainer) {
         bookingsListContainer.addEventListener('click', (e) => {
             
-            const cancelButton = e.target.closest('.Cancel_btn_input'); 
-            console.log(cancelButton.value);
+            const cancelButton = e.target.closest('.Cancel_btn_input');
+            if (cancelButton) {
+                Cancel_booking(cancelButton.value);
+                // console.log(cancelButton.value);
+            } 
 
-            Cancel_booking(cancelButton.value);
+            const printButton = e.target.closest('.Print_btn_input') ;
+            if (printButton) {
+                generatePrintableTicket(printButton.value);
+            }
+
+
         });
     }
+}
 }
 
 function Cancel_booking(bookingId) {
 
-const confirmed = window.confirm("Are you sure you want to cancel this?");
+    const confirmed = window.confirm("Are you sure you want to cancel this?");
     
     if (confirmed) {
         let bookings = getAllBookings();
@@ -882,4 +876,96 @@ const confirmed = window.confirm("Are you sure you want to cancel this?");
 
         renderMyBookings(); 
     }
+}
+
+
+
+const ALL_BOOKINGS_KEY = 'ALL_BOOKING'; 
+
+function generatePrintableTicket(bookingId) {
+    
+    const bookings = getAllBookings();
+    const booking = bookings.find(b => b.id === bookingId);
+    
+
+    if (!booking) {
+        alert("Booking not found. Please try refreshing the page.");
+        return;
+    }
+
+    const destObject = destinations_data.find(d => d.id === booking.destinationId);
+    const destinationName = destObject ? destObject.name : 'Destination Details Unavailable';
+    const detailedPassengerHtml = generatePassengerDetailsHtml(booking); 
+
+    const ticketHTML = `
+        <div class="booking-card p-8 md:p-12 max-w-4xl mx-auto shadow-2xl">
+            <header class="text-center border-b border-neon-cyan/50 mb-6 pb-4">
+                <div class="flex justify-center items-center space-x-2 mb-2">
+                    <i class="fas fa-rocket text-neon-blue text-2xl"></i>
+                    <h1 class="font-orbitron text-3xl text-neon-blue">SPACE VOYAGER BOARDING PASS</h1>
+                </div>
+                <p class="text-gray-400">Confirmation ID: ${booking.id.substring(0, 12)}</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Trip Summary -->
+                <div class="md:col-span-1 border-r border-neon-cyan/20 pr-4">
+                    <h4 class="font-orbitron text-xl text-neon-cyan mb-2">JOURNEY</h4>
+                    <p class="text-white text-2xl font-bold">${destinationName}</p>
+                    <p class="text-gray-500 text-sm">${destObject.travelDuration}</p>
+                </div>
+                
+                <!-- Dates & Price -->
+                <div class="md:col-span-1 border-r border-neon-cyan/20 pr-4">
+                    <h4 class="font-orbitron text-sm text-gray-400">DEPARTURE</h4>
+                    <p class="text-white text-lg">${booking.travelDate}</p>
+                    <h4 class="font-orbitron text-sm text-gray-400 mt-3">TOTAL PRICE</h4>
+                    <p class="text-neon-purple text-xl font-bold">${booking.finalPrice}</p>
+                </div>
+
+                <!-- Passengers Count -->
+                <div class="md:col-span-1">
+                    <h4 class="font-orbitron text-sm text-gray-400">PASSENGERS</h4>
+                    
+                    <p class="text-white text-2xl font-bold">${booking.passengers.length}</p>
+                </div>
+            </div>
+
+            <!-- PASSENGER MANIFEST (Detailed List) -->
+            <div class="mt-6">
+                <h3 class="font-orbitron text-xl mb-4 border-b border-neon-cyan/20 pb-2">Passenger Manifest Details</h3>
+                <div class="space-y-3">
+                    ${detailedPassengerHtml}
+                </div>
+            </div>
+            
+            <!-- PRINT BUTTON & QR CODE Placeholder -->
+            <div class="mt-8 pt-4 border-t border-neon-cyan/20 flex justify-between items-center">
+                <div>
+                    <button id="print-action-button" class="btn-primary text-white px-6 py-2 rounded-lg font-bold">
+                        <i class="fas fa-print mr-2"></i> Print Ticket
+                    </button>
+                </div>
+ 
+            </div>
+        </div>
+    `;
+
+    const mainContent = document.querySelector('main');
+    const navBar = document.querySelector('nav');
+    const footer = document.querySelector('footer');
+
+    const originalBodyHtml = document.body.innerHTML; 
+
+    document.body.innerHTML = `
+        <div id="print-area" class="text-white font-exo min-h-screen p-8">${ticketHTML}</div>
+    `;
+
+    document.getElementById('print-action-button').addEventListener('click', () => {
+        window.print();
+
+        setTimeout(() => {
+             window.location.reload();
+        }, 100); 
+    });
 }
